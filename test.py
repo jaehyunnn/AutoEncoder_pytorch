@@ -10,7 +10,7 @@ from model.basic_AE import AutoEncoder
 # Argument parsing
 parser = argparse.ArgumentParser(description='AutoEncoder PyTorch implementation')
 # Input image path
-parser.add_argument('--input-path', type=str, default='datasets/test_data/img_1.jpg', help='Test image filename')
+parser.add_argument('--input-path', type=str, default='datasets/test_data/img_6.jpg', help='Test image filename')
 parser.add_argument('--checkpoint-path', type=str, default='trained_models/checkpoint.pth.tar', help='Trained model filename')
 args = parser.parse_args()
 
@@ -31,19 +31,20 @@ model.eval()
 code = model.encoding(input)
 recons = model.decoding(code)
 
-recons_np = recons.view(28,28).cpu().detach().numpy()
+input_np = input.view(28,28).cpu().detach().numpy()
+recons_np = recons.clamp(-1,1).view(28,28).cpu().detach().numpy()
 
 # Display result
 fig, axs = plt.subplots(1, 2)
-axs[0].imshow(img)
+axs[0].imshow(input_np)
 axs[0].set_title('Input')
 axs[1].imshow(recons_np)
 axs[1].set_title('Reconstructed')
 plt.show()
 
 # Save result
-save_image(input,'results/input.jpg')
-save_image(recons_np, 'results/recons.jpg')
+io.imsave('results/input.jpg', img)
+io.imsave('results/recons.jpg', recons_np)
 
 
 

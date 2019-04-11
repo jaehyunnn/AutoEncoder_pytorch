@@ -17,7 +17,7 @@ parser = argparse.ArgumentParser(description='AutoEncoder PyTorch implementation
 parser.add_argument('--lr', type=float, default=0.001, help='learning rate')
 parser.add_argument('--momentum', type=float, default=0.9, help='momentum constant')
 parser.add_argument('--num-epochs', type=int, default=1000, help='number of training epochs')
-parser.add_argument('--batch-size', type=int, default=10000, help='training batch size')
+parser.add_argument('--batch-size', type=int, default=256, help='training batch size')
 parser.add_argument('--weight-decay', type=float, default=0, help='weight decay constant')
 parser.add_argument('--seed', type=int, default=1, help='Pseudo-RNG seed')
 # Reload model flag
@@ -53,7 +53,7 @@ if use_cuda:
 
 # Loss function & Optimizer
 criterion = nn.BCELoss()
-optimizer = optim.SGD(model.parameters(), lr=args.lr, momentum=args.momentum, weight_decay=args.weight_decay)
+optimizer = optim.Adam(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
 
 # Train section
 print('Starting training...\n')
