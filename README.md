@@ -18,7 +18,7 @@ An implementation of Auto-Encoders PyTorch implementation
 python train.py \
 --lr <learning rate> \
 --num_epoch <maximum epoch> \
---batch_size <batch size> \
+--batch_size <batch size>
 ```
 ### Test
 ```
