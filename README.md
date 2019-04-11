@@ -19,8 +19,9 @@ python train.py
 ```
 ### Test
 ```
-
-python test.py --input_path <test image path> --checkpoint_path <checkpoint path>
+python test.py \
+--input_path <test image path> \
+--checkpoint_path <checkpoint path>
 ```
 
 ## TODO
