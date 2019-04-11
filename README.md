@@ -15,7 +15,10 @@ An implementation of Auto-Encoders PyTorch implementation
 
 ### Train
 ```
-python train.py
+python train.py \
+--lr <learning rate> \
+--num_epoch <maximum epoch> \
+--batch_size <batch size> \
 ```
 ### Test
 ```
