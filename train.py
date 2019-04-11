@@ -16,7 +16,7 @@ parser = argparse.ArgumentParser(description='AutoEncoder PyTorch implementation
 # Hyper parameters
 parser.add_argument('--lr', type=float, default=0.001, help='learning rate')
 parser.add_argument('--momentum', type=float, default=0.9, help='momentum constant')
-parser.add_argument('--num-epochs', type=int, default=10000, help='number of training epochs')
+parser.add_argument('--num-epochs', type=int, default=1000, help='number of training epochs')
 parser.add_argument('--batch-size', type=int, default=10000, help='training batch size')
 parser.add_argument('--weight-decay', type=float, default=0, help='weight decay constant')
 parser.add_argument('--seed', type=int, default=1, help='Pseudo-RNG seed')
@@ -47,12 +47,12 @@ data_loader = DataLoader(dataset=dataset,
 
 # Create model
 print('Creating model...')
-model = AutoEncoder(input_size=28*28, code_size=3, use_cuda=use_cuda)
+model = AutoEncoder(input_size=28*28, code_size=32, use_cuda=use_cuda)
 if use_cuda:
     model = model.cuda()
 
 # Loss function & Optimizer
-criterion = nn.MSELoss()
+criterion = nn.BCELoss()
 optimizer = optim.SGD(model.parameters(), lr=args.lr, momentum=args.momentum, weight_decay=args.weight_decay)
 
 # Train section

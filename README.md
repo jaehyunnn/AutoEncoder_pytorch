@@ -13,11 +13,13 @@ An implementation of Auto-Encoders PyTorch implementation
 
 ## Usage
 
+### Train
 ```
-#train
 python train.py
+```
+### Test
+```
 
-#test
 python test.py --input_path <test image path> --checkpoint_path <checkpoint path>
 ```
 

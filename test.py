@@ -2,6 +2,7 @@ from __future__ import print_function, division
 import argparse
 import torch
 from torchvision import transforms
+from torchvision.utils import save_image
 import skimage.io as io
 import matplotlib.pyplot as plt
 from model.basic_AE import AutoEncoder
@@ -9,7 +10,7 @@ from model.basic_AE import AutoEncoder
 # Argument parsing
 parser = argparse.ArgumentParser(description='AutoEncoder PyTorch implementation')
 # Input image path
-parser.add_argument('--input-path', type=str, default='datasets/test_data/img_4.jpg', help='Test image filename')
+parser.add_argument('--input-path', type=str, default='datasets/test_data/img_1.jpg', help='Test image filename')
 parser.add_argument('--checkpoint-path', type=str, default='trained_models/checkpoint.pth.tar', help='Trained model filename')
 args = parser.parse_args()
 
@@ -18,7 +19,7 @@ img = io.imread(args.input_path)
 input = torch.Tensor(img).view(-1)
 
 # Create model
-model = AutoEncoder(input_size=28*28, code_size=8, use_cuda=False)
+model = AutoEncoder(input_size=28*28, code_size=32, use_cuda=False)
 
 # Load trained weights
 checkpoint = torch.load(args.checkpoint_path, map_location=lambda storage, loc: storage)
@@ -41,8 +42,8 @@ axs[1].set_title('Reconstructed')
 plt.show()
 
 # Save result
-# io.imsave('results/input.jpg',img)
-# io.imsave('results/recons.jpg',recons_np)
+save_image(input,'results/input.jpg')
+save_image(recons_np, 'results/recons.jpg')
 
 
 

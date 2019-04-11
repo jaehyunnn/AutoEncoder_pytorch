@@ -5,18 +5,16 @@ class AutoEncoder(nn.Module):
         super(AutoEncoder, self).__init__()
 
         self.encoder = nn.Sequential(
-            nn.Linear(input_size, 128),
-            nn.ReLU(inplace=True),
-            nn.Linear(128, 64),
-            nn.ReLU(inplace=True),
-            nn.Linear(64, code_size)
+            nn.Linear(input_size, 64),
+            nn.Sigmoid(),
+            nn.Linear(64, code_size),
+            nn.Sigmoid()
         )
         self.decoder = nn.Sequential(
             nn.Linear(code_size, 64),
-            nn.ReLU(inplace=True),
-            nn.Linear(64, 128),
-            nn.ReLU(inplace=True),
-            nn.Linear(128, input_size)
+            nn.Sigmoid(),
+            nn.Linear(64, input_size),
+            nn.Sigmoid()
         )
         if use_cuda:
             self.encoder.cuda()
