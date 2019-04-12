@@ -1,6 +1,6 @@
 # Auto-Encoders for MNIST
 
-An implementation of Auto-Encoders PyTorch implementation
+PyTorch implementation of Auto-Encoders 
 
 **Schematic structure of an auto-encoder with 3 fully connected hidden layers:** 
 
@@ -13,22 +13,28 @@ An implementation of Auto-Encoders PyTorch implementation
 
 ## Usage
 
-### Train
+#### Train
 ```
-python train.py
+python train.py \
+--model <basic/conv/denoise> \
+--lr <learning rate> \
+--num_epoch <maximum epoch> \
+--batch_size <batch size>
 ```
-### Test
+#### Test
 ```
-
-python test.py --input_path <test image path> --checkpoint_path <checkpoint path>
+python test.py \
+--model <basic/conv/denoise> \
+--input_path <test image path> \
+--checkpoint_path <checkpoint path>
 ```
 
 ## TODO
 
-- [x] Implement 'Basic AE'
-- [ ] Implement 'Convolution-AE'
+- [x] Implement 'Basic-AE'
+- [x] Implement 'Convolutional-AE'
 - [ ] Implement 'Denoising-AE'
 
 ## Author
 
-Jae-Hyun Park : https://github.com/jaehyunnn
+[@ Jae-Hyun Park](https://github.com/jaehyunnn)

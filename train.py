@@ -7,12 +7,16 @@ from torch.autograd import Variable
 from torch.utils.data import DataLoader
 from torchvision import transforms
 from torchvision.datasets import MNIST
-from model.basic_AE import AutoEncoder
+from model import basic_AE
+from model import convolutional_AE
+
 
 print('\nAutoEncoder training script')
 
 # Argument parsing
 parser = argparse.ArgumentParser(description='AutoEncoder PyTorch implementation')
+# Model
+parser.add_argument('--model', type=str, default='conv', help='basic/conv/denoise')
 # Hyper parameters
 parser.add_argument('--lr', type=float, default=0.001, help='learning rate')
 parser.add_argument('--momentum', type=float, default=0.9, help='momentum constant')
@@ -44,15 +48,20 @@ data_loader = DataLoader(dataset=dataset,
                          batch_size=args.batch_size,
                          shuffle=True,
                          num_workers=8)
+print('# of train iamges: ',len(dataset))
 
 # Create model
 print('Creating model...')
-model = AutoEncoder(input_size=28*28, code_size=32, use_cuda=use_cuda)
+if args.model == 'basic':
+    model = basic_AE.AutoEncoder(input_size=28*28, code_size=32, use_cuda=use_cuda)
+elif args.model == 'conv':
+    model = convolutional_AE.AutoEncoder(input_dims=1, code_dims=32, use_cuda=use_cuda)
+
 if use_cuda:
     model = model.cuda()
 
 # Loss function & Optimizer
-criterion = nn.BCELoss()
+criterion = nn.MSELoss()
 optimizer = optim.Adam(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
 
 # Train section
@@ -63,7 +72,8 @@ for epoch in range(args.num_epochs):
     for batch in data_loader:
         # Sample batch
         x, _ = batch
-        x = x.view(x.size(0), -1) # flatten
+        if args.model == 'basic':
+            x = x.view(x.size(0), -1)
         x = Variable(x).cuda() if use_cuda else Variable(x)
         # Forward
         x_prime = model(x)
@@ -79,8 +89,8 @@ for epoch in range(args.num_epochs):
     if epoch % 1 == 0:
         print('EPOCH[{:3d}] Train set: Average loss: {:.4f}'.format(epoch+1,train_loss))
 
-# Save trained model
-save_path = 'trained_models/checkpoint.pth.tar'
-torch.save(model.state_dict(), save_path)
-print("Saved trained checkpoint ---- ",save_path)
+    # Save trained model every epoch
+    save_path = 'trained_models/checkpoint.pth.tar'
+    torch.save(model.state_dict(), save_path)
+    print("Saved trained checkpoint ---- ",save_path)
 

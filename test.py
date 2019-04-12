@@ -5,10 +5,13 @@ from torchvision import transforms
 from torchvision.utils import save_image
 import skimage.io as io
 import matplotlib.pyplot as plt
-from model.basic_AE import AutoEncoder
+from model import basic_AE
+from model import convolutional_AE
 
 # Argument parsing
 parser = argparse.ArgumentParser(description='AutoEncoder PyTorch implementation')
+# Model
+parser.add_argument('--model', type=str, default='conv', help='basic/conv/denoise')
 # Input image path
 parser.add_argument('--input-path', type=str, default='datasets/test_data/img_6.jpg', help='Test image filename')
 parser.add_argument('--checkpoint-path', type=str, default='trained_models/checkpoint.pth.tar', help='Trained model filename')
@@ -16,10 +19,17 @@ args = parser.parse_args()
 
 # Load input image
 img = io.imread(args.input_path)
-input = torch.Tensor(img).view(-1)
+if args.model == 'basic':
+    input = torch.Tensor(img).view(-1)
+else:
+    input = torch.Tensor(img).unsqueeze(0).unsqueeze(0)
 
 # Create model
-model = AutoEncoder(input_size=28*28, code_size=32, use_cuda=False)
+print('Creating model...')
+if args.model == 'basic':
+    model = basic_AE.AutoEncoder(input_size=28*28, code_size=32, use_cuda=False)
+elif args.model == 'conv':
+    model = convolutional_AE.AutoEncoder(input_dims=1, code_dims=32, use_cuda=False)
 
 # Load trained weights
 checkpoint = torch.load(args.checkpoint_path, map_location=lambda storage, loc: storage)
@@ -32,7 +42,7 @@ code = model.encoding(input)
 recons = model.decoding(code)
 
 input_np = input.view(28,28).cpu().detach().numpy()
-recons_np = recons.clamp(-1,1).view(28,28).cpu().detach().numpy()
+recons_np = recons.view(28,28).cpu().detach().numpy()
 
 # Display result
 fig, axs = plt.subplots(1, 2)
