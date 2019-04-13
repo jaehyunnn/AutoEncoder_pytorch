@@ -16,7 +16,7 @@ print('\nAutoEncoder training script')
 # Argument parsing
 parser = argparse.ArgumentParser(description='AutoEncoder PyTorch implementation')
 # Model
-parser.add_argument('--model', type=str, default='conv', help='basic/conv/denoise')
+parser.add_argument('--model', type=str, default='basic', help='basic/conv/denoise')
 # Hyper parameters
 parser.add_argument('--lr', type=float, default=0.001, help='learning rate')
 parser.add_argument('--momentum', type=float, default=0.9, help='momentum constant')
